@@ -1,26 +1,15 @@
-import DecisionTree
-import h5py
+import Dataset
+import DecisionTree as DT
+import DTLearn
 
-tree = DecisionTree.Node(1)
-tree.add_child(DecisionTree.Node(3))
-tree.add_child(DecisionTree.Node(4))
-tree.add_child(DecisionTree.Node(5))
-tree.children[1].add_child(DecisionTree.Node(5))
+dataset, attrs = Dataset.load_data()
 
-DecisionTree.print_tree(tree)
+s = ""
+for a in attrs:
+    s += a.name + ", "
+print(s)
 
-f = h5py.File('plant-classification.h5', 'r')
-dset = f["/data/int0"]
+for d in dataset:
+    print(d)
 
-D = []
-for col, l in enumerate(dset):
-    for row, value in enumerate(dset[col][0:10]):
-        if len(D) <= row:
-            D.append({"x": [], "y": []})
-        if col <= 5:
-            D[row]["x"].append(value)
-        else:
-            D[row]["y"].append(value)
-
-for row in D:
-    print(row)
+DT.print_tree(DTLearn.dt_learn(dataset, attrs))
