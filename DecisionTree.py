@@ -32,54 +32,61 @@ class Leaf:
         return True
 
 
-class Options:
+# Print
+class TreePrinter:
     FORK = u'\u251c'
     LAST = u'\u2514'
     VERTICAL = u'\u2502'
     HORIZONTAL = u'\u2500'
     NEWLINE = u'\u23ce'
 
+    def __init__(self):
+        self.n_leaves = 0
+        self.n_nodes = 0
 
-def _format_newlines(prefix, formatted_node):
-    replacement = u''.join([
-        Options.NEWLINE,
-        u'\n',
-        prefix])
-    return formatted_node.replace(u'\n', replacement)
+    def _format_newlines(self, prefix, formatted_node):
+        replacement = u''.join([
+            self.NEWLINE,
+            u'\n',
+            prefix])
+        return formatted_node.replace(u'\n', replacement)
 
+    def _format_tree(self, node, prefix=u''):
+        if node.is_leaf():
+            self.n_leaves += 1
+            return
+        self.n_nodes += 1
+        children = node.children
+        next_prefix = u''.join([prefix, self.VERTICAL, u'   '])
+        for child in children[:-1]:
+            yield u''.join([prefix,
+                            self.FORK,
+                            self.HORIZONTAL,
+                            str(child.attr_value),
+                            self.HORIZONTAL,
+                            u' ',
+                            self._format_newlines(next_prefix, str(child))])
+            for result in self._format_tree(child, next_prefix):
+                yield result
 
-def _format_tree(node, prefix=u''):
-    if node.is_leaf():
-        return
-    children = node.children
-    next_prefix = u''.join([prefix, Options.VERTICAL, u'   '])
-    for child in children[:-1]:
+        last_prefix = u''.join([prefix, u'    '])
         yield u''.join([prefix,
-                        Options.FORK,
-                        Options.HORIZONTAL,
-                        str(child.attr_value),
-                        Options.HORIZONTAL,
+                        self.LAST,
+                        self.HORIZONTAL,
+                        str(children[-1].attr_value),
+                        self.HORIZONTAL,
                         u' ',
-                        _format_newlines(next_prefix, str(child))])
-        for result in _format_tree(child, next_prefix):
+                        self._format_newlines(last_prefix, str(children[-1]))])
+        for result in self._format_tree(children[-1], last_prefix):
             yield result
 
-    last_prefix = u''.join([prefix, u'    '])
-    yield u''.join([prefix,
-                    Options.LAST,
-                    Options.HORIZONTAL,
-                    str(children[-1].attr_value),
-                    Options.HORIZONTAL,
-                    u' ',
-                    _format_newlines(last_prefix, str(children[-1]))])
-    for result in _format_tree(children[-1], last_prefix):
-        yield result
-
-
-def print_tree(node):
-    lines = itertools.chain(
-        [str(node)],
-        _format_tree(node),
-        [u''],
-    )
-    print(u'\n'.join(lines))
+    def print_tree(self, node):
+        self.n_leaves = 0
+        self.n_nodes = 0
+        lines = itertools.chain(
+            [str(node)],
+            self._format_tree(node),
+            [u''],
+        )
+        print("\n" + u'\n'.join(lines))
+        print(str(self.n_nodes) + " inner nodes, " + str(self.n_leaves) + " leaves")

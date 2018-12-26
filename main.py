@@ -1,8 +1,10 @@
-import Dataset
-import DecisionTree as DT
-import DTLearn
+from timeit import default_timer as timer
 
-dataset, attrs = Dataset.load_data()
+import DTLearn
+import Dataset
+import DecisionTree as Dt
+
+dataset, attrs, label = Dataset.load_data()
 
 s = ""
 for a in attrs:
@@ -12,4 +14,7 @@ print(s)
 for d in dataset:
     print(d)
 
-DT.print_tree(DTLearn.dt_learn(dataset, attrs))
+start = timer()
+tree = DTLearn.dt_learn(dataset, attrs, DTLearn.DistSettings(label, m=0))
+print("Time: %.5fs" % (timer() - start))
+Dt.TreePrinter().print_tree(tree)

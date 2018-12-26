@@ -19,19 +19,28 @@ class Attr:
         self.domain = domain
 
 
+class Label:
+    def __init__(self, name, domain):
+        self.name = name
+        self.domain = domain
+
+
 def load_data():
     file = h5py.File('plant-classification.h5', 'r')["/data/int0"]
     dataset = []
     for col, l in enumerate(file):
-        for row, value in enumerate(file[col][0:10]):
+        for row, value in enumerate(file[col][0:]):
             if col == 0:
                 dataset.append(Data())
             if col <= 5:
                 dataset[row].x.append(value)
             else:
                 dataset[row].y = value
+    dataset.append(Data([4, 3, 3, 4, 5, 4], 2))
+    dataset.append(Data([4, 3, 3, 4, 5, 5], 1))
     dataset.append(Data([4, 3, 3, 4, 5, 6], 2))
+
     attrs = [Attr(0, "habitat", range(1, 7)), Attr(1, "colour", range(1, 5)),
              Attr(2, "leaf type", range(1, 5)), Attr(3, "leaf width", range(1, 5)),
-             Attr(4, "leaf length", range(1, 5)), Attr(5, "height", range(1, 5))]
-    return dataset, attrs
+             Attr(4, "leaf length", range(1, 6)), Attr(5, "height", range(1, 7))]
+    return dataset, attrs, Label("edible", range(1, 3))
