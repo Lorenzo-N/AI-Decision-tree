@@ -37,7 +37,7 @@ def load_data():
             else:
                 dataset[row].y = value
     dataset.append(Data([4, 3, 3, 4, 5, 4], 2))
-    dataset.append(Data([4, 3, 3, 4, 5, 5], 1))
+    dataset.append(Data([4, 1, 3, 4, 5, 3], 1))
     dataset.append(Data([4, 3, 3, 4, 5, 6], 2))
 
     attrs = [Attr(0, "habitat", range(1, 7)), Attr(1, "colour", range(1, 5)),
