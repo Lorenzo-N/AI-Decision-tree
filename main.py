@@ -4,18 +4,20 @@ import DTLearn
 import Dataset
 import DecisionTree as Dt
 
-dataset, attrs, label = Dataset.load_data()
+training_set, test_set, attrs, label = Dataset.load_poker_data()
 
-s = ""
-for a in attrs:
-    s += a.name + ", "
-print(s)
+if len(training_set) <= 1000:
+    s = ""
+    for a in attrs:
+        s += a.name + ", "
+    print(s)
+    for d in training_set:
+        print(d)
 
-# for d in dataset:
-#     print(d)
-DTLearn.Distribution.settings(label, m=2)
+print("Learning...")
+DTLearn.Distribution.settings(label, p=0.00)
 start = timer()
-tree = DTLearn.dt_learn(dataset, attrs)
+tree = DTLearn.dt_learn(training_set, attrs)
 time = timer() - start
 
 Dt.TreePrinter().print_tree(tree)
@@ -23,5 +25,13 @@ Dt.TreePrinter().print_tree(tree)
 # m=1 =>  85, 340, 0.01332s
 # m=2 =>  70, 276, 0.01236s
 # m=3 =>  37, 129, 0.01056s
-print("Time: %.5fs" % time)
-print("Risk: %.2f%%" % (DTLearn.risk(tree, dataset) * 100))
+print("Learning time: %.3fs" % time)
+start = timer()
+risk = Dataset.risk(tree, training_set)
+time = timer() - start
+
+print("Training set risk: %.2f%% in %.3fs" % (risk * 100, time))
+start = timer()
+risk = Dataset.risk(tree, test_set)
+time = timer() - start
+print("Test set risk: %.2f%% in %.3fs" % (risk * 100, time))

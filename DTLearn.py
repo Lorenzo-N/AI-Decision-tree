@@ -88,13 +88,3 @@ def dt_learn(dataset, attrs, parent_dist=None):
             subtree = dt_learn(dv, child_attrs, dist)
             tree.add_child(subtree, v)
         return tree
-
-
-def find_y(node, x):
-    if node.is_leaf():
-        return node.y
-    return find_y(next(child for child in node.children if child.attr_value == x[node.attr.index]), x)
-
-
-def risk(tree, test_set):
-    return sum([1 for d in test_set if find_y(tree, d.x) != d.y]) / len(test_set)
