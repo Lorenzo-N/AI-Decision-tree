@@ -70,12 +70,3 @@ def load_seq_data(n):
              Attr(8, "S5", range(1, 5)), Attr(9, "C5", range(1, 14))]
     return dataset, attrs, Label("hand", range(0, 10))
 
-
-def find_y(node, x):
-    if node.is_leaf():
-        return node.y
-    return find_y(next(child for child in node.children if child.attr_value == x[node.attr.index]), x)
-
-
-def risk(tree, test_set):
-    return sum([1 for d in test_set if find_y(tree, d.x) != d.y]) / len(test_set)
