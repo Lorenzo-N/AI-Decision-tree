@@ -1,12 +1,12 @@
 # AI-Decision-tree
 Elaborato per l’esame finale del corso di Intelligenza Artificiale (2018/19)
-##Obiettivo
+## Obiettivo
 L'obiettivo di questo elaborato è di implementare l'algoritmo per l'apprendimento di alberi di decisione 
 utilizzando l'entropia come misura di impurità e come criteri per terminare la ricorsione 
 l'errore di classificazione _p_ e il numero massimo di errori _m_.
 
 
-##Esecuzione test
+## Esecuzione test
 Per eseguire il programma si devono selezionare le impostazioni desiderate all'interno del file 
 **main.py** ed eseguirlo per visualizzare su terminale i risultati dei test richiesti. 
 Il programma carica i 3 data sets e prosegue a seconda della **modalità** selezionata con l'istruzione 
@@ -35,7 +35,7 @@ oppure del parametro _m_ utilizzato per la creazione dell'albero modificando l'i
 Essendo i dati riordinati in modo casuale, al momento del caricamento è inoltre possibile impostare
  un seed specifico (di default è 1) tramite `random.seed(1)`, in modo da ottenere dei risultati riproducibili.
  
-##Citazioni
+## Citazioni
 La classe _TreePrinter_ all'interno del file **DecisionTree.py** contiene alcuni metodi 
 ripresi da https://github.com/jml/tree-format, nel quale sono stati implementati per stampare su terminale 
 un albero formato da liste di tuple. I metodi sono stati poi riadattati e modificati per stampare 
