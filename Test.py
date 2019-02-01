@@ -12,16 +12,20 @@ class Colors:
     END = '\033[0m'
 
 
+# Attraversa l'albero e ritorna il label associato a una particolare istanza
 def find_y(node, x):
     if node.is_leaf():
         return node.y
     return find_y(next(child for child in node.children if child.attr_value == x[node.attr.index]), x)
 
 
+# Calcola l'errore sul test set in percentuale
 def risk(tree, test_set):
     return sum([1 for d in test_set if find_y(tree, d.x) != d.y]) / len(test_set)
 
 
+# Colora l'output sulla base del primo errore calcolato: normale se è uguale, blu se è migliore,
+# giallo se è peggiore di meno dell'1% e rosso se è peggiore di più dell'1%.
 def format_risk(test_risk, first):
     if test_risk < first:
         out = Colors.BLUE
@@ -34,6 +38,7 @@ def format_risk(test_risk, first):
     return out + " %.3f%%\n" % test_risk + Colors.END
 
 
+# Stampa la tabella con il tempo di apprendimento e gli errori su training e test set al variare di p
 def print_p_table(data):
     training_set, test_set, attrs, label = data
     print("\n")
@@ -58,6 +63,7 @@ def print_p_table(data):
         sys.stdout.write(out)
 
 
+# Stampa la tabella con il tempo di apprendimento e gli errori su training e test set al variare di m
 def print_m_table(data):
     training_set, test_set, attrs, label = data
     print("\n")
@@ -82,6 +88,36 @@ def print_m_table(data):
         sys.stdout.write(out)
 
 
+# Stampa a coppie (x,y) il valore di p e l'errore sul test set al variare di p
+def export_p_table(data):
+    training_set, test_set, attrs, label = data
+    out = "\r"
+    for p in range(0, 101, 5):
+        out += "(%.d," % (p / 5)
+        sys.stdout.write(out)
+        DTLearn.Distribution.settings(label, p=p / 1000)
+        tree = DTLearn.dt_learn(training_set, attrs)
+        out += "%.3f)" % (risk(tree, test_set) * 100)
+        sys.stdout.write(out)
+    print("\n")
+
+
+# Stampa a coppie (x,y) il valore di m e l'errore sul test set al variare di p
+def export_m_table(data):
+    training_set, test_set, attrs, label = data
+    out = "\r"
+    for m in range(0, 21):
+        out += "(%d," % m
+        sys.stdout.write(out)
+        DTLearn.Distribution.settings(label, m=m)
+        tree = DTLearn.dt_learn(training_set, attrs)
+        out += "%.3f)" % (risk(tree, test_set) * 100)
+        sys.stdout.write(out)
+    print("\n")
+
+
+# Stampa l'albero di decisione, il tempo di apprendimento,
+# il numero di nodi interni e di foglie per i valori di p e m assegnati
 def print_tree(data, p=None, m=None):
     training_set, test_set, attrs, label = data
     print("Learning...")

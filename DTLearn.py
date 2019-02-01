@@ -3,11 +3,13 @@ import numpy as np
 import DecisionTree as Dt
 
 
+# Gestisce i parametri $p$ e $m$ e calcola la distribuzione dei labels
 class Distribution:
     label = None
     p = None
     m = None
 
+    # Permette di impostare p oppure m e il dominio dei labels da testare
     @staticmethod
     def settings(label=None, p=None, m=None):
         if label is not None:
@@ -17,18 +19,22 @@ class Distribution:
         if (p is not None and m is not None) or (p is None and m is None):
             raise AttributeError("Set p xor m")
 
+    # Calcola la distribuzione dei labels
     def __init__(self, dataset):
         self.distribution = {}
         self.tot = len(dataset)
         for y in Distribution.label.domain:
             self.distribution[y] = sum([1 for d in dataset if d.y == y])
 
+    # Ritorna il label più comune
     def get_most_common(self):
         return max(self.distribution.items(), key=lambda item: item[1])[0]
 
+    # Ritorna la percentuale di volte che compare un determinato label
     def get_normalized(self, y):
         return self.distribution[y] / self.tot
 
+    # Ritorna true se il dataset è una foglia in base ai valori di p e m impostati
     def is_leaf(self):
         if Distribution.m is not None:
             return max(self.distribution.values()) >= self.tot - Distribution.m
@@ -36,21 +42,7 @@ class Distribution:
             return max(self.distribution.values()) >= self.tot * (1 - Distribution.p)
 
 
-# Cost test
-# import matplotlib.pyplot as plt
-# x = []
-# y = []
-# for i in range(11):
-#     data = []
-#     for j in range(i):
-#         data.append(Dataset.Data([4, 3, 3, 4, 5, 4], 1))
-#     for j in range(10 - i):
-#         data.append(Dataset.Data([4, 3, 3, 4, 5, 4], 2))
-#     dist = DTLearn.Distribution(data, DTLearn.DistSettings(label, p=0.04))
-#     y.append(DTLearn.cost(dist))
-#     x.append(i / 10)
-# plt.plot(x, y)
-# plt.show()
+# Implementa il costo secondo la misura di impurità entropia
 def cost(dist):
     s = 0
     for k in Distribution.label.domain:
@@ -60,6 +52,7 @@ def cost(dist):
     return -s
 
 
+# Calcola il guadagno di un particolare attributo
 def gain(dataset, dist, attr):
     s = 0
     for v in attr.domain:
@@ -69,10 +62,12 @@ def gain(dataset, dist, attr):
     return cost(dist) - s
 
 
+# Ritorna l'attributo che ha guadagno massimo
 def max_gain(dataset, dist, attrs):
     return attrs[np.argmax([gain(dataset, dist, a) for a in attrs])]
 
 
+# Algoritmo di apprendimento dt_learn
 def dt_learn(dataset, attrs, parent_dist=None):
     if not dataset:
         return Dt.Leaf(parent_dist.get_most_common())

@@ -3,6 +3,7 @@ import random
 import h5py
 
 
+# Rappresenta un'istanza di dati e il corrispettivo label
 class Data:
     def __init__(self, x=None, y=None):
         if x is None:
@@ -14,6 +15,7 @@ class Data:
         return "x:" + str(self.x) + "  y:" + str(self.y)
 
 
+# Indica il nome e dominio di un attributo
 class Attr:
     def __init__(self, index, name, domain):
         self.index = index
@@ -21,16 +23,20 @@ class Attr:
         self.domain = domain
 
 
+# Indica il nome e dominio ei labels
 class Label:
     def __init__(self, name, domain):
         self.name = name
         self.domain = domain
 
 
+# Crea una lista di caratteri da c1 a c2 compresi
 def char_range(c1, c2):
     return list(chr(c) for c in range(ord(c1), ord(c2) + 1))
 
 
+# Carica il data set sulle piante, riordina i dati in modo casuale,
+# definisce i domini degli attributi e dei labels e separa il training set dal test set
 def load_plant_data():
     # tot: 2691 (1883 / 808)
     print("Loading plant data...")
@@ -38,13 +44,15 @@ def load_plant_data():
     dataset = [Data(list(x), y) for x, y in zip(zip(*file[0:6, :]), file[6])]
     random.shuffle(dataset)
 
-    attrs = [Attr(0, "habitat", range(1, 7)), Attr(1, "colour", range(3, 5)),
+    attrs = [Attr(0, "habitat", range(1, 7)), Attr(1, "colour", range(1, 5)),
              Attr(2, "leaf type", range(1, 5)), Attr(3, "leaf width", range(1, 3)),
              Attr(4, "leaf length", range(1, 5)), Attr(5, "height", range(1, 4))]
     return dataset[:1883], dataset[1883:], attrs, Label("edible", range(1, 3))
 
 
-def load_krk_data():
+# Carica il data set sul gioco degli scacchi, riordina i dati in modo casuale,
+# definisce i domini degli attributi e dei labels e separa il training set dal test set
+def load_chess_data():
     # tot: 28056 (19639 / 8417)
     print("Loading chess data...")
     with open('krkopt.data') as f:
@@ -53,21 +61,24 @@ def load_krk_data():
     content = [x.strip() for x in content]
     dataset = [Data(x.split(",")[:6], x.split(",")[6]) for x in content]
 
+    # Riduce le possibili classificazioni da 18 a 4
     for d in dataset:
         if d.y == "zero" or d.y == "one" or d.y == "two" or d.y == "three" or d.y == "four" or d.y == "five":
-            d.y = "few"
+            d.y = "low"
         elif d.y == "six" or d.y == "seven" or d.y == "eight" or d.y == "nine" or d.y == "ten":
             d.y = "medium"
         elif d.y == "eleven" or d.y == "twelve" or d.y == "thirteen" or d.y == "fourteen" or d.y == "fifteen" \
                 or d.y == "sixteen":
             d.y = "high"
 
-    attrs = [Attr(0, "White King file", char_range('a', 'h')), Attr(1, "White King rank", char_range('1', '4')),
+    attrs = [Attr(0, "White King file", char_range('a', 'h')), Attr(1, "White King rank", char_range('1', '8')),
              Attr(2, "White Rook file", char_range('a', 'h')), Attr(3, "White Rook rank", char_range('1', '8')),
              Attr(4, "Black King file", char_range('a', 'h')), Attr(5, "Black King rank", char_range('1', '8'))]
-    return dataset[:19639], dataset[19639:], attrs, Label("hand", ["draw", "few", "medium", "high"])
+    return dataset[:19639], dataset[19639:], attrs, Label("hand", ["draw", "low", "medium", "high"])
 
 
+# Carica il data set sul poker, riordina i dati in modo casuale,
+# definisce i domini degli attributi e dei labels e separa il training set dal test set
 def load_poker_data():
     # tot: 1025010 (25010 / 1000000)
     print("Loading poker data...")
@@ -75,7 +86,8 @@ def load_poker_data():
     dataset = [Data(list(map(int, x)), y) for x, y in zip(zip(*file["/data/data"]), file["/data/label"][:])]
     print("Ordering data...")
     random.shuffle(dataset)
-    # ordering data
+
+    # Ordina le carte di ogni mano
     for d in dataset:
         cards = [(d.x[0], d.x[1]), (d.x[2], d.x[3]), (d.x[4], d.x[5]),
                  (d.x[6], d.x[7]), (d.x[8], d.x[9])]

@@ -1,6 +1,7 @@
 import itertools
 
 
+# Rappresenta un nodo dell'albero: gestisce la lista dei figli e tiene un riferimento all'attributo che contiene
 class Node:
     def __init__(self, attr):
         self.attr = attr
@@ -19,6 +20,7 @@ class Node:
         return False
 
 
+# Tiene memoria del label che rappresenta
 class Leaf:
     def __init__(self, y):
         self.y = y
@@ -32,7 +34,7 @@ class Leaf:
         return True
 
 
-# Print
+# Classe con il metodo print_tree per stampare l'albero di decisione e il numero di nodi interni e foglie
 class TreePrinter:
     FORK = u'\u251c'
     LAST = u'\u2514'
