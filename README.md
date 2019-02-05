@@ -39,6 +39,13 @@ Essendo i dati riordinati in modo casuale, al momento del caricamento è inoltre
 La classe _TreePrinter_ all'interno del file **DecisionTree.py** contiene alcuni metodi 
 ripresi da https://github.com/jml/tree-format, nel quale sono stati implementati per stampare su terminale 
 un albero formato da liste di tuple. I metodi sono stati poi riadattati e modificati per stampare 
-l'albero decisionale di questo progetto, composto dalle classi Node e Leaf, aggiungendo alcune funzionalità come
+l'albero decisionale, composto dalle classi Node e Leaf, all'interno della modalità `MODE.PRINT_TREE`,
+ aggiungendo alcune funzionalità come
 la stampa del numero di nodi e di foglie e la stampa del valore dell'attributo _attr_value_ 
 lungo gli archi dell'albero per rendere più chiaro l'albero di decisione.
+
+## Output
+Infine si riporta un esempio di output con le impostazioni di default, 
+riportato su 3 colonne per renderlo più compatto.\
+\
+![alt text](Output.png)

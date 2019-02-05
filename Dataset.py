@@ -55,7 +55,7 @@ def load_plant_data():
 def load_chess_data():
     # tot: 28056 (19639 / 8417)
     print("Loading chess data...")
-    with open('krkopt.data') as f:
+    with open('chess.data') as f:
         content = f.readlines()
     random.shuffle(content)
     content = [x.strip() for x in content]
