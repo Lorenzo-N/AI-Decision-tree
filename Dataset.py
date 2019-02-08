@@ -40,7 +40,7 @@ def char_range(c1, c2):
 def load_plant_data():
     # tot: 2691 (1883 / 808)
     print("Loading plant data...")
-    file = h5py.File('plant.h5', 'r')["/data/int0"]
+    file = h5py.File('Dataset/plant.h5', 'r')["/data/int0"]
     dataset = [Data(list(x), y) for x, y in zip(zip(*file[0:6, :]), file[6])]
     random.shuffle(dataset)
 
@@ -55,7 +55,7 @@ def load_plant_data():
 def load_chess_data():
     # tot: 28056 (19639 / 8417)
     print("Loading chess data...")
-    with open('chess.data') as f:
+    with open('Dataset/chess.data') as f:
         content = f.readlines()
     random.shuffle(content)
     content = [x.strip() for x in content]
@@ -82,7 +82,7 @@ def load_chess_data():
 def load_poker_data():
     # tot: 1025010 (25010 / 1000000)
     print("Loading poker data...")
-    file = h5py.File('poker.h5', 'r')
+    file = h5py.File('Dataset/poker.h5', 'r')
     dataset = [Data(list(map(int, x)), y) for x, y in zip(zip(*file["/data/data"]), file["/data/label"][:])]
     print("Ordering data...")
     random.shuffle(dataset)

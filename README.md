@@ -9,7 +9,7 @@ l'errore di classificazione _p_ e il numero massimo di errori _m_.
 ## Esecuzione test
 Per eseguire il programma si devono selezionare le impostazioni desiderate all'interno del file 
 **main.py** ed eseguirlo per visualizzare su terminale i risultati dei test richiesti. 
-Il programma carica i 3 data sets e prosegue a seconda della **modalità** selezionata con l'istruzione 
+Il programma carica i 3 data set e prosegue a seconda della **modalità** selezionata con l'istruzione 
 `mode = MODE.PRINT_TABLE`:
 
 * `MODE.PRINT_TABLE` (default): genera due tabelle per ogni data set, la prima al variare di _p_ e la seconda di _m_,
@@ -34,7 +34,12 @@ oppure del parametro _m_ utilizzato per la creazione dell'albero modificando l'i
 
 Essendo i dati riordinati in modo casuale, al momento del caricamento è inoltre possibile impostare
  un seed specifico (di default è 1) tramite `random.seed(1)`, in modo da ottenere dei risultati riproducibili.
- 
+
+## Librerie
+Per poter eseguire il codice è necessario aver installato le librerie standard _random_, _enum_, _itertools_, _sys_ e
+ _timeit_ e le librerie addizionali _numpy_ per il calcolo matematico e 
+ _h5py_ per leggere i data set salvati in formato HDF5.
+
 ## Citazioni
 La classe _TreePrinter_ all'interno del file **DecisionTree.py** contiene alcuni metodi 
 ripresi da https://github.com/jml/tree-format, nel quale sono stati implementati per stampare su terminale 
@@ -48,4 +53,4 @@ lungo gli archi dell'albero per rendere più chiaro l'albero di decisione.
 Infine si riporta un esempio di output con le impostazioni di default, 
 riportato su 3 colonne per renderlo più compatto.\
 \
-![alt text](Output.png)
+![alt text](Output/Print_Table.png)
